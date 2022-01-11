@@ -15,8 +15,7 @@ def filter_datum(
     for i in fields:
         message = re.sub(
             fr'{i}=\b[a-zA-Z0-9_/]+\b{separator}',
-            f'{i}={redaction}{separator}',
-            message)
+            f'{i}={redaction}{separator}', message)
     return message
 
 
