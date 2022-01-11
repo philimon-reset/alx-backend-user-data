@@ -13,9 +13,7 @@ def filter_datum(
         separator: str) -> str:
     """ Filter logging """
     for i in fields:
-        message = re.sub(
-            fr'{i}=\b[a-zA-Z0-9_/]+\b{separator}',
-            f'{i}={redaction}{separator}', message)
+        message = re.sub(fr'{i}=\b[a-zA-Z0-9_/]+\b{separator}', f'{i}={redaction}{separator}', message)  # nopep8
     return message
 
 
