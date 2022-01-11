@@ -6,17 +6,11 @@ from typing import List
 PII_FIELDS = ("name", "email", "ssn", "password", "ip")
 
 
-def filter_datum(fields: List, redaction: str, message: str, separator: str) -> List:
+def filter_datum(fields: List, redaction: str, message: str, separator: str) -> str:
     """ Filter logging """
-    regex = message.split(separator)
-    new = []
-    for i in regex:
-        if i.split("=")[0] in fields:
-            new.append(re.sub(i.split("=")[1], redaction, i))
-        else:
-            new.append(i)
-    separator += ' '
-    return separator.join(new)
+    for i in fields:
+            message = re.sub(fr'{i}=\b[a-zA-Z0-9_/]+\b{separator}', f'{i}={redaction}{separator}', message)
+    return message
 
 
 class RedactingFormatter(logging.Formatter):
