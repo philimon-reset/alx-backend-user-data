@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 """ Write a function called filter_datum that returns log """
+import logging
 import re
 from typing import List
-PII_FIELDS = ("name","email","ssn","password","ip")
+PII_FIELDS = ("name", "email", "ssn", "password", "ip")
+
+
 def filter_datum(fields, redaction, message, separator):
     """ Filter logging """
     regex = message.split(separator)
@@ -15,8 +18,6 @@ def filter_datum(fields, redaction, message, separator):
     separator += ' '
     return separator.join(new)
 
-import logging
-
 
 class RedactingFormatter(logging.Formatter):
     """ Redacting Formatter class
@@ -27,11 +28,19 @@ class RedactingFormatter(logging.Formatter):
     SEPARATOR = ";"
 
     def __init__(self, fields):
+        """ Initialize the formatter """
         super(RedactingFormatter, self).__init__(self.FORMAT)
         self.fields = fields
 
     def format(self, record: logging.LogRecord) -> str:
-        return filter_datum(self.fields, self.REDACTION, logging.Formatter.format(self, record), self.SEPARATOR)
+        """ format logrecord """
+        return filter_datum(
+            self.fields,
+            self.REDACTION,
+            logging.Formatter.format(
+                self,
+                record),
+            self.SEPARATOR)
 
 
 def get_logger() -> logging.Logger:
