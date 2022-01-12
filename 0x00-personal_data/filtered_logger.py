@@ -3,7 +3,11 @@
 import logging
 import re
 from typing import List
-PII_FIELDS = ("name", "email", "ssn", "password", "ip")
+from os import getenv
+import mysql.connector
+
+
+PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 
 def filter_datum(
@@ -13,13 +17,15 @@ def filter_datum(
         separator: str) -> str:
     """ Filter logging """
     for i in fields:
-        message = re.sub(fr'{i}=\b[a-zA-Z0-9_/]+\b{separator}', f'{i}={redaction}{separator}', message)  # nopep8
+        message = re.sub(
+            fr'{i}=.+?{separator}',
+            f'{i}={redaction}{separator}',
+            message)
     return message
 
 
 class RedactingFormatter(logging.Formatter):
-    """ Redacting Formatter class
-        """
+    """ Redacting Formatter class """
 
     REDACTION = "***"
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
@@ -45,9 +51,45 @@ def get_logger() -> logging.Logger:
     """ get logger for csv file """
     logger = logging.getLogger("user_data")
     stream = logging.StreamHandler()
-    stream.setFormatter(RedactingFormatter)
-    logging.LoggerAdapter(logging.getLogger('user_data'), PII_FIELDS)
+    stream.setFormatter(RedactingFormatter(PII_FIELDS))
     logger.addHandler(stream)
     logger.propagate = False
     logger.setLevel(logging.INFO)
     return logger
+
+
+def get_db():
+    """ returns a connector to the database """
+    cnx = mysql.connector.connect(
+        user=getenv('PERSONAL_DATA_DB_USERNAME'),
+        password=getenv('PERSONAL_DATA_DB_PASSWORD'),
+        host=getenv('PERSONAL_DATA_DB_HOST'),
+        database=getenv('PERSONAL_DATA_DB_NAME'))
+    return cnx
+
+
+def main():
+    """ generate mysql connector to the database """
+    drop = get_db()
+    cursor = drop.cursor()
+    query = "SELECT * FROM users"
+    cursor.execute(query)
+    formatter = get_logger()
+    for (
+        name,
+        email,
+        ssn,
+        phone,
+        password,
+        ip,
+        last_login,
+            user_agent) in cursor:
+        message = f"name={name}; email={email}; phone={phone}; ssn={ssn}; password={password}; ip={ip}; last_login={last_login}; user_agent={user_agent};"  # nopep8
+        formatter.info(message)
+
+    cursor.close()
+    drop.close()
+
+
+if __name__ == '__main__':
+    main()
