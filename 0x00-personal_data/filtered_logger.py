@@ -10,10 +10,10 @@ import mysql.connector
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 
-def filter_datum(fields: List[str], redaction: str, message: str, separator: str) -> str:  # nopep8
+def filter_datum(fields: List, redaction: str, message: str, separator: str) -> str:  # nopep8
     """ Filter logging """
     for i in fields:
-        message = re.sub(fr'{i}=.+?{separator}', f'{i}={redaction}{separator}', message)  # nopep8
+        message = re.sub(fr'{i}=.+?{separator}', f' {i}={redaction}{separator}', message)  # nopep8
     return message
 
 
@@ -34,7 +34,7 @@ class RedactingFormatter(logging.Formatter):
         return filter_datum(
             self.fields,
             self.REDACTION,
-            logging.Formatter.format(
+            super(RedactingFormatter, self).format(
                 record),
             self.SEPARATOR)
 
