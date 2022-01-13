@@ -8,7 +8,6 @@ from base64 import b64decode as decode
 from api.v1.auth.auth import Auth
 from typing import TypeVar, Tuple
 from models.user import User
-from models.base import Base
 
 
 class BasicAuth(Auth):
