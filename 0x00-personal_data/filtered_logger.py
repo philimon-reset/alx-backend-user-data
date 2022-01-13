@@ -13,7 +13,7 @@ PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 def filter_datum(fields: List, redaction: str, message: str, separator: str) -> str:  # nopep8
     """ Filter logging """
     for i in fields:
-        message = re.sub(fr'{i}=\b[a-zA-Z0-9_/]+\b{separator}', f'{i}={redaction}{separator}', message)  # nopep8
+        message = re.sub(fr'{i}=.+?{separator}', f' {i}={redaction}{separator}', message)  # nopep8
     return message
 
 
@@ -51,7 +51,7 @@ def get_logger() -> logging.Logger:
     return logger
 
 
-def get_db():
+def get_db() -> mysql.connector.connection.MySQLConnection:
     """ returns a connector to the database """
     cnx = mysql.connector.connect(
         user=getenv('PERSONAL_DATA_DB_USERNAME'),
@@ -61,7 +61,7 @@ def get_db():
     return cnx
 
 
-def main():
+def main() -> None:
     """ generate mysql connector to the database """
     drop = get_db()
     cursor = drop.cursor()
