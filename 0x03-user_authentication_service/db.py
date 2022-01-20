@@ -69,3 +69,4 @@ class DB:
             if not hasattr(User, key):
                 raise ValueError
             setattr(check, key, value)
+        self._session.commit()
