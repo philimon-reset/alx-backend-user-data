@@ -13,6 +13,21 @@ def status() -> str:
     """
     return jsonify({"status": "OK"})
 
+@app_views.route('/unauthorized', methods=['GET'], strict_slashes=False)
+def status_401() -> None:
+    """ GET /api/v1/unauthorized
+    Return:
+      - abort 401
+    """
+    abort(401)
+
+@app_views.route('/forbidden', methods=['GET'], strict_slashes=False)
+def status_403() -> None:
+    """ GET /api/v1/forbidden
+    Return:
+      - abort 403
+    """
+    abort(403)
 
 @app_views.route('/stats/', strict_slashes=False)
 def stats() -> str:
@@ -24,15 +39,3 @@ def stats() -> str:
     stats = {}
     stats['users'] = User.count()
     return jsonify(stats)
-
-
-@app_views.route('/unauthorized', methods=['GET'], strict_slashes=False)
-def unauthorized_test():
-    """test unauthorized error handler"""
-    abort(401)
-
-
-@app_views.route('/forbidden', methods=['GET'], strict_slashes=False)
-def forbidden_test():
-    """test forbidden error handler"""
-    abort(403)

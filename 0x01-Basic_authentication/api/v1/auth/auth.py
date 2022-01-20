@@ -1,43 +1,20 @@
-#!/usr/bin/env python3
-"""
-Simple Authorization implementation
-"""
-
 from flask import request
 from typing import List, TypeVar
 
-
-class Auth:
-    """
-    Simple Authorization class
-    """
-
+class Auth():
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
-        """
-        check if a path needs authorization
-        """
-        if not path or not excluded_paths:
+        check = path
+        if path is None or (excluded_paths is None or len(excluded_paths) == 0):
             return True
-        ProperPath = path + '/' if path[-1] != '/' else path
-        for path in excluded_paths:
-            test_path = path[:-1] if path[-1] == "*" else path
-            if ProperPath.startswith(test_path):
-                return False
+        if path[-1] != "/":
+            check += "/"
+        if check in excluded_paths or path in excluded_paths:
+            return False
         return True
 
     def authorization_header(self, request=None) -> str:
-        """
-        checks if the proper authorization is available in the request header
-        """
-        if not request:
+        if request is None or request.get("Authorization") == None:
             return None
-        ReqHead = request.headers.get("Authorization")
-        if not ReqHead:
-            return None
-        return ReqHead
-
+        return request.get("Authorization")
     def current_user(self, request=None) -> TypeVar('User'):
-        """
-        gets the current user
-        """
         return None
