@@ -60,9 +60,7 @@ class DB:
     def update_user(self, username_id: int, **kwargs) -> None:
         try:
             check = self.find_user_by(id=username_id)
-        except NoResultFound:
+        except:
             raise ValueError
         for key, value in kwargs.items():
-            if not hasattr(User, key):
-                raise ValueError
             setattr(check, key, value)
