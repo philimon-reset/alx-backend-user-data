@@ -59,10 +59,10 @@ class DB:
             dbm.commit()
             return main.first()
 
-    def update_user(self, username_id: int, **kwargs) -> None:
+    def update_user(self, user_id: int, **kwargs) -> None:
         """ Document string for the checker  """
         try:
-            check = self.find_user_by(id=username_id)
+            check = self.find_user_by(id=user_id)
         except NoResultFound:
             raise ValueError
         dbm = self._session
