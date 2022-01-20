@@ -63,7 +63,7 @@ class DB:
         """ Document string for the checker  """
         try:
             check = self.find_user_by(id=username_id)
-        except:
+        except NoResultFound:
             raise ValueError
         for key, value in kwargs.items():
             if not hasattr(User, key):
