@@ -3,7 +3,7 @@
 Route module for the API
 """
 from os import getenv
-from flask import Flask, jsonify, abort, request, make_response, redirect
+from flask import Flask, jsonify, abort, request, make_response, redirect, url_for
 from flask_cors import (CORS, cross_origin)
 from auth import Auth
 
@@ -53,7 +53,7 @@ def logout():
     check = AUTH.get_user_from_session_id(id_)
     if check:
         AUTH.destroy_session(check.id)
-        redirect('/')
+        redirect(url_for("/"))
     else:
         abort(403)
 
