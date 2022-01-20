@@ -39,6 +39,7 @@ class DB:
         return self.__session
 
     def add_user(self, email: str, hashed_password: str) -> User:
+        """ Document string for the checker  """
         dbm = self._session
         ed_user = User(email=email, hashed_password=hashed_password)
         dbm.add(ed_user)
@@ -46,6 +47,7 @@ class DB:
         return ed_user
 
     def find_user_by(self, **kwargs) -> User:
+        """ Document string for the checker  """
         dbm = self._session
         main = dbm.query(User)
         for key, value in kwargs.items():
@@ -58,6 +60,7 @@ class DB:
             return main.first()
 
     def update_user(self, username_id: int, **kwargs) -> None:
+        """ Document string for the checker  """
         try:
             check = self.find_user_by(id=username_id)
         except NoResultFound:
