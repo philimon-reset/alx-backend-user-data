@@ -70,4 +70,4 @@ class DB:
             if not hasattr(User, key):
                 raise ValueError
             setattr(check, key, value)
-            dbm.commit()
+        dbm.commit()
