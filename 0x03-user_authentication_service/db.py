@@ -65,7 +65,7 @@ class DB:
             check = self.find_user_by(id=username_id)
         except NoResultFound:
             raise ValueError
-        dbm = self._session()
+        dbm = self._session
         for key, value in kwargs.items():
             if not hasattr(User, key):
                 raise ValueError
