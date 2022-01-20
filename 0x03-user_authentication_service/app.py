@@ -46,11 +46,11 @@ def login():
     return resp
 
 
-@app.route('/sessions', methods=['DELETE'])
+@app.route('/sessions', methods=["DELETE"])
 def logout():
     """ delete a new session for the user """
     id_ = request.cookies.get('session_id')
-    check = AUTH.get_user_from_session_id(str(id_))
+    check = AUTH.get_user_from_session_id(id_)
     if check:
         AUTH.destroy_session(check.id)
         redirect('/')
