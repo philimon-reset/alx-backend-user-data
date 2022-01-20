@@ -89,5 +89,5 @@ class Auth:
                 check.id,
                 hashed_password=hash,
                 reset_token=None)
-        except:
+        except NoResultFound:
             raise ValueError
