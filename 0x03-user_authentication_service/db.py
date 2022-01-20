@@ -67,7 +67,7 @@ class DB:
             raise ValueError
         dbm = self._session
         for key, value in kwargs.items():
-            if not hasattr(User, key):
+            if not hasattr(check, key):
                 raise ValueError
             setattr(check, key, value)
         dbm.commit()
